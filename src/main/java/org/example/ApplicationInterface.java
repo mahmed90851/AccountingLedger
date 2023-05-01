@@ -22,21 +22,11 @@ public class ApplicationInterface {
             String option = scanner.nextLine();
 
             switch (option.toUpperCase()) {
-                case "D":
-                    addDeposit();
-                    break;
-                case "P":
-                    makePayment();
-                    break;
-                case "L":
-                    showLedgerScreen();
-                    break;
-                case "X":
-                    exit = true;
-                    break;
-                default:
-                    System.out.println("Invalid option. Please try again.");
-                    break;
+                case "D" -> addDeposit();
+                case "P" -> makePayment();
+                case "L" -> showLedgerScreen();
+                case "X" -> exit = true;
+                default -> System.out.println("Invalid option. Please try again.");
             }
         }
     }
@@ -100,7 +90,6 @@ public class ApplicationInterface {
     public static void showLedgerScreen() {
         Scanner scanner = new Scanner(System.in);
         Ledger ledger = new Ledger();
-        ledger.loadTransactions(); // Load all transactions from file
 
         // Loop until user chooses to go back to home screen
         while (true) {
@@ -127,7 +116,7 @@ public class ApplicationInterface {
                     ledger.printPayments();
                     break;
                 case "R":
-                    showReportsScreen(ledger);
+                    ledger.showReportScreen();
                     break;
                 case "H":
                     return; // go back to home screen
