@@ -1,6 +1,8 @@
 package org.example;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,7 +33,7 @@ public class ApplicationInterface {
                 case "D" -> addDeposit();
                 case "P" -> makePayment();
                 case "L" -> showLedgerScreen();
-                case "X" -> exit = true;
+                case "X" -> exit();
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
@@ -39,13 +41,14 @@ public class ApplicationInterface {
 
     public static void addDeposit() {
         Scanner scanner = new Scanner(System.in);
-        //ask the user for all the parts of the transaction details
-        System.out.print("Enter deposit date (YYYY-MM-DD): ");
-        String date = scanner.nextLine();
+        // get the current date and time
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String date = now.format(dateFormatter);
+        String time = now.format(timeFormatter);
 
-        System.out.print("Enter deposit time (HH:MM:SS): ");
-        String time = scanner.nextLine();
-
+        //ask the user for the other parts of the transaction details
         System.out.print("Enter deposit description: ");
         String description = scanner.nextLine();
         System.out.print("Enter deposit source: ");
@@ -56,7 +59,7 @@ public class ApplicationInterface {
 
         // this saves the users input into the transactions.csv file.
         try (FileWriter writer = new FileWriter("transactions.csv", true)) {
-            writer.write(String.format("%s|%s|%s|%s|%.2f\n", date, time, description, vendor, amount));
+            writer.write(String.format("%s|%s|%s|%s|+%.2f\n", date, time, description, vendor, amount));
         } catch (IOException e) {
             System.out.println("Error writing transaction to file: " + e.getMessage());
         }
@@ -65,14 +68,17 @@ public class ApplicationInterface {
         showHomeScreen();
     }
 
+
     public static void makePayment() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter payment information:");
-        System.out.print("Date (YYYY-MM-DD): ");
-        String date = scanner.next();
-        System.out.print("Time (HH:MM:SS): ");
-        String time = scanner.next();
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String date = now.format(dateFormatter);
+        String time = now.format(timeFormatter);
+
         System.out.print("Description: ");
         String description = scanner.next();
         System.out.print("Vendor: ");
@@ -132,9 +138,8 @@ public class ApplicationInterface {
             }
         }
     }
-
-
     public static void exit(){
-
+        System.out.println("====Exiting Application====");
+        System.exit(0);
     }
 }

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85bb9188-e1ca-44de-832b-c9154ae5b032" name="Changes" comment="used array list as a public method fixed program">
+    <list default="true" id="85bb9188-e1ca-44de-832b-c9154ae5b032" name="Changes" comment="updated show deposits and payment methods">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ApplicationInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Ledger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Ledger.java" afterDir="false" />
@@ -85,13 +85,21 @@
       <option name="project" value="LOCAL" />
       <updated>1683037739815</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="updated show deposits and payment methods">
+      <created>1683041569961</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1683041569962</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial code" />
     <MESSAGE value="Ledger class set up" />
     <MESSAGE value="used array list as a public method fixed program" />
-    <option name="LAST_COMMIT_MESSAGE" value="used array list as a public method fixed program" />
+    <MESSAGE value="updated show deposits and payment methods" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated show deposits and payment methods" />
   </component>
 </project>

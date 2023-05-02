@@ -1,5 +1,4 @@
 package org.example;
-
 import java.io.*;
 import java.util.*;
 import java.time.LocalDate;
@@ -10,6 +9,10 @@ public class Ledger {
 
     public static void printAllTransactions() {
         transactions = readTransactions();
+        /*use the collections class to sort the list in order by newest date.
+        the comparator compares the dates of two objects from the transaction details.
+        The most recent date which is (t1) and the earlier date (d2).
+         */
         Collections.sort(transactions, new Comparator<TransactionDetails>() {
             public int compare(TransactionDetails t1, TransactionDetails t2) {
                 return t2.getDate().compareTo(t1.getDate());
@@ -24,11 +27,17 @@ public class Ledger {
             System.out.printf("%-15s %-15s %-25s %-15s %-20.2f\n", t.getDate(), t.getTime(), t.getDescription(),
                     t.getVendor(), t.getAmount());
         }
+        ApplicationInterface.showLedgerScreen();
     }
 
 
     public static void printDeposits() {
         transactions = readTransactions();
+        Collections.sort(transactions, new Comparator<TransactionDetails>() {
+            public int compare(TransactionDetails t1, TransactionDetails t2) {
+                return t2.getDate().compareTo(t1.getDate());
+            }
+        });
         System.out.println("DEPOSITS\n");
         System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
         System.out.println("------------------------------------------------------------------------------");
@@ -39,12 +48,19 @@ public class Ledger {
                         t.getVendor(), t.getAmount());
             }
         }
+        ApplicationInterface.showLedgerScreen();
     }
 
-    public static void printPayments() {transactions = readTransactions();
+    public static void printPayments() {
+        transactions = readTransactions();
+        Collections.sort(transactions, new Comparator<TransactionDetails>() {
+            public int compare(TransactionDetails t1, TransactionDetails t2) {
+                return t2.getDate().compareTo(t1.getDate());
+            }
+        });
         System.out.println("DEPOSITS\n");
         System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
-        System.out.println("------------------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------------");
 
         for (TransactionDetails t : transactions) {
             if (t.getAmount() < 0) {
@@ -52,6 +68,7 @@ public class Ledger {
                         t.getVendor(), t.getAmount());
             }
         }
+        ApplicationInterface.showLedgerScreen();
     }
 
     public static ArrayList<TransactionDetails> readTransactions() {
@@ -85,7 +102,7 @@ public class Ledger {
     public static void showReport() {
         ArrayList<TransactionDetails> transactions = new ArrayList<TransactionDetails>();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Select a report:");
+        System.out.println("\n=====Select a report:=====\n");
         System.out.println("1) Month To Date");
         System.out.println("2) Previous Month");
         System.out.println("3) Year To Date");
@@ -103,10 +120,12 @@ public class Ledger {
                 break;
             case 2:
                 // Display Previous Month report
+                getPreviousMonth();
 
                 break;
             case 3:
                 // Display Year To Date report
+                getYearToDate();
                 break;
             case 4:
                 // Display Previous Year report
@@ -116,9 +135,11 @@ public class Ledger {
                 break;
             case 6:
                 // Call customSearch method
+
                 break;
             case 0:
                 // Return to previous screen
+                ApplicationInterface.showLedgerScreen();
                 break;
             default:
                 System.out.println("Invalid choice.");
@@ -128,21 +149,80 @@ public class Ledger {
 
     public static void getMonthToDate() {
         transactions = readTransactions();
-        LocalDate today = LocalDate.now();
+        Collections.sort(transactions, new Comparator<TransactionDetails>() {
+            public int compare(TransactionDetails t1, TransactionDetails t2) {
+                return t2.getDate().compareTo(t1.getDate());
+            }
+        });
+        LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
 
-        // this includes transactions for the current month
+        // this includes transactions from the past 30 days
         List<TransactionDetails> monthToDateTransactions = new ArrayList<>();
         for (TransactionDetails transaction : transactions) {
-            if (transaction.getDate().getMonthValue() == today.getMonthValue() && transaction.getDate().getYear() == today.getYear()) {
+            if (!transaction.getDate().isBefore(thirtyDaysAgo)) {
                 monthToDateTransactions.add(transaction);
             }
-            // Print the results
-            System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
-            System.out.println("------------------------------------------------------------------------------");
-            for (TransactionDetails t : monthToDateTransactions) {
-                System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", t.getDate(), t.getTime(), t.getDescription(),
-                        t.getVendor(), t.getAmount());
-            }
+        }
+
+        // Print the results
+        System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
+        System.out.println("------------------------------------------------------------------------------");
+        for (TransactionDetails t : monthToDateTransactions) {
+            System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", t.getDate(), t.getTime(), t.getDescription(),
+                    t.getVendor(), t.getAmount());
         }
     }
+    public static void getPreviousMonth() {
+        transactions = readTransactions();
+        Collections.sort(transactions, new Comparator<TransactionDetails>() {
+            public int compare(TransactionDetails t1, TransactionDetails t2) {
+                return t2.getDate().compareTo(t1.getDate());
+            }
+        });
+        LocalDate today = LocalDate.now();
+        LocalDate prevMonth = today.minusMonths(1);
+
+        List<TransactionDetails> prevMonthTransactions = new ArrayList<>();
+        for (TransactionDetails transaction : transactions) {
+            LocalDate transactionDate = transaction.getDate();
+            if (transactionDate.isAfter(prevMonth.withDayOfMonth(1).minusDays(1))
+                    && transactionDate.isBefore(today.withDayOfMonth(1))) {
+                prevMonthTransactions.add(transaction);
+            }
+        }
+
+        System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
+        System.out.println("------------------------------------------------------------------------------");
+        for (TransactionDetails t : prevMonthTransactions) {
+            System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", t.getDate(), t.getTime(), t.getDescription(),
+                    t.getVendor(), t.getAmount());
+        }
+    }
+    public static void getYearToDate() {
+        transactions = readTransactions();
+        Collections.sort(transactions, new Comparator<TransactionDetails>() {
+            public int compare(TransactionDetails t1, TransactionDetails t2) {
+                return t2.getDate().compareTo(t1.getDate());
+            }
+        });
+        LocalDate thirtyDaysAgo = LocalDate.now().minusDays(365);
+
+        // this includes transactions from the past 30 days
+        List<TransactionDetails> monthToDateTransactions = new ArrayList<>();
+        for (TransactionDetails transaction : transactions) {
+            if (!transaction.getDate().isBefore(thirtyDaysAgo)) {
+                monthToDateTransactions.add(transaction);
+            }
+        }
+
+        // Print the results
+        System.out.println("\n================================Year to Date================================");
+        System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
+        System.out.println("------------------------------------------------------------------------------");
+        for (TransactionDetails t : monthToDateTransactions) {
+            System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", t.getDate(), t.getTime(), t.getDescription(),
+                    t.getVendor(), t.getAmount());
+        }
+    }
+
 }
