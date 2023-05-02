@@ -99,7 +99,7 @@ public class ApplicationInterface {
 
         // Loop until user chooses to go back to home screen
         while (true) {
-            System.out.println("=== LEDGER SCREEN ===");
+            System.out.println("\n=== LEDGER SCREEN ===\n");
             System.out.println("A) All");
             System.out.println("D) Deposits");
             System.out.println("P) Payments");
@@ -133,33 +133,7 @@ public class ApplicationInterface {
         }
     }
 
-    public static void showAllTransactions(){
 
-    }
-    public static void showDeposits(){
-
-    }
-    public static void showPayments(){
-
-    }
-    public static void showReportsScreen(Ledger ledger){
-
-    }
-    public static void showMonthToDateReport(){
-
-    }
-    public static void showPreviousMonthReport(){
-
-    }
-    public static void showYearToDateReport(){
-
-    }
-    public static void showPreviousYearReport(){
-
-    }
-    public static void searchByVendor(){
-
-    }
     public static void exit(){
 
     }

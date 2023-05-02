@@ -7,18 +7,53 @@ import java.time.LocalTime;
 
 public class Ledger {
     private static ArrayList<TransactionDetails> transactions = new ArrayList<>();
+
     public static void printAllTransactions() {
-        showLedger();
+        transactions = readTransactions();
+        Collections.sort(transactions, new Comparator<TransactionDetails>() {
+            public int compare(TransactionDetails t1, TransactionDetails t2) {
+                return t2.getDate().compareTo(t1.getDate());
+            }
+        });
+
+        System.out.println("LEDGER\n");
+        System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
+        System.out.println("------------------------------------------------------------------------------");
+
+        for (TransactionDetails t : transactions) {
+            System.out.printf("%-15s %-15s %-25s %-15s %-20.2f\n", t.getDate(), t.getTime(), t.getDescription(),
+                    t.getVendor(), t.getAmount());
+        }
     }
 
 
     public static void printDeposits() {
+        transactions = readTransactions();
+        System.out.println("DEPOSITS\n");
+        System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
+        System.out.println("------------------------------------------------------------------------------");
 
+        for (TransactionDetails t : transactions) {
+            if (t.getAmount() > 0) {
+                System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", t.getDate(), t.getTime(), t.getDescription(),
+                        t.getVendor(), t.getAmount());
+            }
+        }
     }
 
-    public static void printPayments(){
+    public static void printPayments() {transactions = readTransactions();
+        System.out.println("DEPOSITS\n");
+        System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
+        System.out.println("------------------------------------------------------------------------------");
 
+        for (TransactionDetails t : transactions) {
+            if (t.getAmount() < 0) {
+                System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", t.getDate(), t.getTime(), t.getDescription(),
+                        t.getVendor(), t.getAmount());
+            }
+        }
     }
+
     public static ArrayList<TransactionDetails> readTransactions() {
         try {
             FileReader fileReader = new FileReader("transactions.csv");
@@ -46,21 +81,8 @@ public class Ledger {
         return transactions;
     }
 
-    public static void showLedger(){
-        transactions = readTransactions();
-            System.out.println("LEDGER\n");
-            System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
-            System.out.println("------------------------------------------------------------------------------");
 
-            for (TransactionDetails t : transactions) {
-                System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", t.getDate(), t.getTime(), t.getDescription(),
-                        t.getVendor(), t.getAmount());
-            }
-        }
-
-
-
-    public static void showReport(){
+    public static void showReport() {
         ArrayList<TransactionDetails> transactions = new ArrayList<TransactionDetails>();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Select a report:");
@@ -81,6 +103,7 @@ public class Ledger {
                 break;
             case 2:
                 // Display Previous Month report
+
                 break;
             case 3:
                 // Display Year To Date report
@@ -102,6 +125,7 @@ public class Ledger {
                 break;
         }
     }
+
     public static void getMonthToDate() {
         transactions = readTransactions();
         LocalDate today = LocalDate.now();
@@ -112,14 +136,13 @@ public class Ledger {
             if (transaction.getDate().getMonthValue() == today.getMonthValue() && transaction.getDate().getYear() == today.getYear()) {
                 monthToDateTransactions.add(transaction);
             }
-        }
-
-        // Print the results
-        System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
-        System.out.println("------------------------------------------------------------------------------");
-        for (TransactionDetails t : monthToDateTransactions) {
-            System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", t.getDate(), t.getTime(), t.getDescription(),
-                    t.getVendor(), t.getAmount());
+            // Print the results
+            System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
+            System.out.println("------------------------------------------------------------------------------");
+            for (TransactionDetails t : monthToDateTransactions) {
+                System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", t.getDate(), t.getTime(), t.getDescription(),
+                        t.getVendor(), t.getAmount());
+            }
         }
     }
 }

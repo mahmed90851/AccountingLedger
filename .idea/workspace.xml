@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85bb9188-e1ca-44de-832b-c9154ae5b032" name="Changes" comment="Ledger class set up">
+    <list default="true" id="85bb9188-e1ca-44de-832b-c9154ae5b032" name="Changes" comment="used array list as a public method fixed program">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ApplicationInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Ledger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Ledger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transactions.csv" beforeDir="false" afterPath="$PROJECT_DIR$/transactions.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,12 +78,20 @@
       <option name="project" value="LOCAL" />
       <updated>1682969728782</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="used array list as a public method fixed program">
+      <created>1683037739815</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1683037739815</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial code" />
     <MESSAGE value="Ledger class set up" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ledger class set up" />
+    <MESSAGE value="used array list as a public method fixed program" />
+    <option name="LAST_COMMIT_MESSAGE" value="used array list as a public method fixed program" />
   </component>
 </project>
