@@ -2,6 +2,12 @@ package org.example;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.time.format.DateTimeParseException;
+import java.util.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 public class ApplicationInterface {
     public static void main(String[] args) {
         showHomeScreen();
@@ -105,20 +111,21 @@ public class ApplicationInterface {
             switch (choice) {
                 case "A":
                     System.out.println("\n=== ALL TRANSACTIONS ===\n");
-                    ledger.printAllTransactions();
+                    Ledger.printAllTransactions();
                     break;
                 case "D":
                     System.out.println("=== DEPOSITS ===");
-                    ledger.printDeposits();
+                    Ledger.printDeposits();
                     break;
                 case "P":
                     System.out.println("=== PAYMENTS ===");
-                    ledger.printPayments();
+                    Ledger.printPayments();
                     break;
                 case "R":
-                    ledger.showReportScreen();
+                    Ledger.showReport();
                     break;
                 case "H":
+                    showHomeScreen();
                     return; // go back to home screen
                 default:
                     System.out.println("Invalid choice. Please try again.");
