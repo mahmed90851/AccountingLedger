@@ -4,20 +4,16 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.time.format.DateTimeParseException;
-import java.util.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+
 public class ApplicationInterface {
     public static void main(String[] args) {
         showHomeScreen();
     }
-    //The home screen allows the user tos
+    //The home screen allows the user to select some options for the application
     public static void showHomeScreen() {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
+        //this will loop until user wants to exit the application
 
         while (!exit) {
             System.out.println("\n===== ACCOUNTING LEDGER =====\n");
@@ -38,9 +34,12 @@ public class ApplicationInterface {
             }
         }
     }
-
+    /* this method asks for the users input information for a deposit made at any current
+           time by the user. it writes this information onto transactions.csv
+        */
     public static void addDeposit() {
         Scanner scanner = new Scanner(System.in);
+
         // get the current date and time
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -59,7 +58,7 @@ public class ApplicationInterface {
 
         // this saves the users input into the transactions.csv file.
         try (FileWriter writer = new FileWriter("transactions.csv", true)) {
-            writer.write(String.format("%s|%s|%s|%s|+%.2f\n", date, time, description, vendor, amount));
+            writer.write(String.format("%s|%s|%s|%s|%.2f\n", date, time, description, vendor, amount));
         } catch (IOException e) {
             System.out.println("Error writing transaction to file: " + e.getMessage());
         }
@@ -67,8 +66,9 @@ public class ApplicationInterface {
         System.out.println("Deposit saved successfully.");
         showHomeScreen();
     }
-
-
+    /* this method asks for the users input information for a payment made at any current
+       time by the user. it writes this information onto transactions.csv
+    */
     public static void makePayment() {
         Scanner scanner = new Scanner(System.in);
 
@@ -87,6 +87,7 @@ public class ApplicationInterface {
         double amount = scanner.nextDouble();
 
         // Append payment information to transactions file
+
         try {
             FileWriter writer = new FileWriter("transactions.csv", true);
             writer.write(String.format("%s|%s|%s|%s|-%.2f\n", date, time, description, vendor, amount));
@@ -98,12 +99,12 @@ public class ApplicationInterface {
         }
         showHomeScreen();
     }
-
+    //this will display a new screen that allows the user to select options for the ledger
     public static void showLedgerScreen() {
         Scanner scanner = new Scanner(System.in);
         Ledger ledger = new Ledger();
 
-        // Loop until user chooses to go back to home screen
+        // This will loop until user chooses to go back to home screen
         while (true) {
             System.out.println("\n=== LEDGER SCREEN ===\n");
             System.out.println("A) All");
@@ -111,7 +112,7 @@ public class ApplicationInterface {
             System.out.println("P) Payments");
             System.out.println("R) Reports");
             System.out.println("H) Home");
-            System.out.print("Enter your choice: ");
+            System.out.print("\nEnter your choice: \n");
 
             String choice = scanner.nextLine().toUpperCase();
             switch (choice) {
@@ -138,8 +139,9 @@ public class ApplicationInterface {
             }
         }
     }
+    //only purpose is to exit the program
     public static void exit(){
-        System.out.println("====Exiting Application====");
+        System.out.println("==== Exiting Application ====");
         System.exit(0);
     }
 }
