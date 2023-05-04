@@ -5,10 +5,10 @@ With this application, users can add deposits, make payments, and generate vario
 
 ## Features
 
-1. Add deposits to the ledger
-2. Make payments (debit) from the ledger
-3. View ledger entries
-4. Generate reports:
+. Add deposits to the ledger
+. Make payments (debit) from the ledger
+. View ledger entries
+. Generate reports:
    Month-to-date transactions
    Previous month's transactions
    Year-to-date transactions
