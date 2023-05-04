@@ -254,51 +254,26 @@ public class Ledger {
         printHeader();
         for (TransactionDetails transaction : transactions) {
             // this checks to see if the start date for the transaction is NOT before the date entered by the user
-            boolean matchesStartDate;
-            if (startDate == null) {
-                matchesStartDate = true;
-            } else {
-                matchesStartDate = !transaction.getDate().isBefore(startDate);
-            }
+            boolean matchesStartDate = startDate == null || !transaction.getDate().isBefore(startDate);
 
             // this checks to see if the end date for the transaction is NOT after the date entered by the user
-            boolean matchesEndDate;
-            if (endDate == null) {
-                matchesEndDate = true;
-            } else {
-                matchesEndDate = !transaction.getDate().isAfter(endDate);
-            }
+            boolean matchesEndDate = endDate == null || !transaction.getDate().isAfter(endDate);
 
             // checks to see if users description input contains the description from the list
-            boolean matchesDescription;
-            if (description.isEmpty() || transaction.getDescription().toLowerCase().contains(description.toLowerCase())) {
-                matchesDescription = true;
-            } else {
-                matchesDescription = false;
-            }
+            boolean matchesDescription = description.isEmpty() || transaction.getDescription().toLowerCase().contains(description.toLowerCase());
 
             // checks to see if users vendor input contains the vendor from the list
-            boolean matchesVendor;
-            if (vendor.isEmpty() || transaction.getVendor().toLowerCase().contains(vendor.toLowerCase())) {
-                matchesVendor = true;
-            }else {
-                matchesVendor = false;
-            }
+            boolean matchesVendor = vendor.isEmpty() || transaction.getVendor().toLowerCase().contains(vendor.toLowerCase());
 
             // checks to see if the users amount input matches any amount from the list
-            boolean matchesAmount;
-            if (amount == 0 || transaction.getAmount() == amount) {
-                matchesAmount = true;
-            } else {
-                matchesAmount = false;
-            }
+            boolean matchesAmount = amount == 0 || transaction.getAmount() == amount;
+
             if (matchesStartDate && matchesEndDate && matchesDescription && matchesVendor && matchesAmount) {
                 System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", transaction.getDate(), transaction.getTime(), transaction.getDescription(),
                         transaction.getVendor(), transaction.getAmount());
+            }else{
+                System.err.println("Transaction not found");
             }
-        }
-        if (transactions.isEmpty()) {
-            System.err.println("\nNo transactions found.");
         }
     }
 }
