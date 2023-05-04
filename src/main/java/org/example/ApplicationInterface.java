@@ -7,8 +7,38 @@ import java.util.Scanner;
 
 public class ApplicationInterface {
     public static void main(String[] args) {
+        //login();
         showHomeScreen();
     }
+    public static void login() {
+        Scanner scanner = new Scanner(System.in);
+
+        String username;
+        String password;
+
+        do {
+            System.out.println("Enter your username:");
+            username = scanner.nextLine();
+
+            System.out.println("Enter your password:");
+            password = scanner.nextLine();
+
+            if (!isValidCredentials(username, password)) {
+                System.err.println("That is incorrect. Please try again.");
+            }
+        } while (!isValidCredentials(username, password));
+
+        System.out.println("Login successful.");
+        // continue with the rest of the program
+    }
+
+    public static boolean isValidCredentials(String username, String password) {
+        // check if the username and password are valid
+        // return true if they are, false otherwise
+        // example:
+        return username.equals("bestcoderever") && password.equals("password");
+    }
+
     //The home screen allows the user to select some options for the application
     public static void showHomeScreen() {
         Scanner scanner = new Scanner(System.in);
@@ -16,12 +46,13 @@ public class ApplicationInterface {
         //this will loop until user wants to exit the application
 
         while (!exit) {
-            System.out.println("\n===== ACCOUNTING LEDGER =====\n");
-            System.out.println("Please select an option:");
-            System.out.println("D) Add Deposit");
-            System.out.println("P) Make Payment (Debit)");
-            System.out.println("L) Ledger");
-            System.out.println("X) Exit");
+            System.out.println("\n===== ACCOUNTING LEDGER =====\n" +
+                    "\nPlease select an option:\n" +
+                    "[D] Add Deposit\n" +
+                    "[P] Make Payment (Debit)\n" +
+                    "[L] Ledger\n" +
+                    "[X] Exit");
+
 
             String option = scanner.nextLine();
 
@@ -30,7 +61,7 @@ public class ApplicationInterface {
                 case "P" -> makePayment();
                 case "L" -> showLedgerScreen();
                 case "X" -> exit();
-                default -> System.out.println("Invalid option. Please try again.");
+                default -> System.err.println("Invalid option. Please try again.");
             }
         }
     }
@@ -40,14 +71,15 @@ public class ApplicationInterface {
     public static void addDeposit() {
         Scanner scanner = new Scanner(System.in);
 
-        // get the current date and time
+        // this gets the current date and time and uses it in the format we want for our transaction.csv file
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         String date = now.format(dateFormatter);
         String time = now.format(timeFormatter);
 
-        //ask the user for the other parts of the transaction details
+        try (FileWriter writer = new FileWriter("transactions.csv", true)) {
+        //asks the user for the other parts of the transaction details
         System.out.print("Enter deposit description: ");
         String description = scanner.nextLine();
         System.out.print("Enter deposit source: ");
@@ -56,11 +88,15 @@ public class ApplicationInterface {
         System.out.print("Enter deposit amount: ");
         double amount = Double.parseDouble(scanner.nextLine());
 
-        // this saves the users input into the transactions.csv file.
-        try (FileWriter writer = new FileWriter("transactions.csv", true)) {
+        // this saves the users input into the transactions.csv file with a file writer
+
             writer.write(String.format("%s|%s|%s|%s|%.2f\n", date, time, description, vendor, amount));
         } catch (IOException e) {
-            System.out.println("Error writing transaction to file: " + e.getMessage());
+            System.err.println("Error writing transaction to file: " + e.getMessage());
+        }catch (NumberFormatException e){
+            System.err.println("\nPlease input a number for 'amount' " + e.getMessage());
+            addDeposit();
+            return;
         }
 
         System.out.println("Deposit saved successfully.");
@@ -86,16 +122,13 @@ public class ApplicationInterface {
         System.out.print("Amount (negative value): ");
         double amount = scanner.nextDouble();
 
-        // Append payment information to transactions file
-
-        try {
-            FileWriter writer = new FileWriter("transactions.csv", true);
+        try {FileWriter writer = new FileWriter("transactions.csv", true);
             writer.write(String.format("%s|%s|%s|%s|-%.2f\n", date, time, description, vendor, amount));
             writer.close();
             System.out.println("Payment added successfully.");
         } catch (IOException e) {
-            System.out.println("An error occurred while saving payment information to file.");
-            e.printStackTrace();
+            System.err.println("An error occurred while saving payment information to file.");
+            return;
         }
         showHomeScreen();
     }
@@ -106,42 +139,49 @@ public class ApplicationInterface {
 
         // This will loop until user chooses to go back to home screen
         while (true) {
-            System.out.println("\n=== LEDGER SCREEN ===\n");
-            System.out.println("A) All");
-            System.out.println("D) Deposits");
-            System.out.println("P) Payments");
-            System.out.println("R) Reports");
-            System.out.println("H) Home");
-            System.out.print("\nEnter your choice: \n");
+            System.out.println(
+                    "\n===== LEDGER SCREEN =====\n" +
+                            "\nPlease select an option: \n"+
+                    "[A] All\n" +
+                    "[D] Deposits\n" +
+                    "[P] Payments\n" +
+                    "[R] Reports\n" +
+                    "[H] Home\n" );
+
 
             String choice = scanner.nextLine().toUpperCase();
             switch (choice) {
+                // will display all transactions
                 case "A":
-                    System.out.println("\n=== ALL TRANSACTIONS ===\n");
+
                     Ledger.printAllTransactions();
                     break;
                 case "D":
-                    System.out.println("=== DEPOSITS ===");
+                    //will display all deposits
+
                     Ledger.printDeposits();
                     break;
                 case "P":
-                    System.out.println("=== PAYMENTS ===");
+                    //will display all payments
+
                     Ledger.printPayments();
                     break;
                 case "R":
+                    // this will open the reports screen for more options
                     Ledger.showReport();
                     break;
                 case "H":
+                    // returns user to home screen
                     showHomeScreen();
-                    return; // go back to home screen
+                    return;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.err.println("Invalid choice. Please try again.");
             }
         }
     }
     //only purpose is to exit the program
     public static void exit(){
-        System.out.println("==== Exiting Application ====");
+        System.out.println("===== EXITING APPLICATION =====");
         System.exit(0);
     }
 }

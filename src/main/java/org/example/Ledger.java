@@ -12,7 +12,7 @@ public class Ledger {
     // this is the format for my header. it is repeated several times, so it has its own method.
     public static void printHeader() {
         System.out.printf("%-15s %-15s %-25s %-15s %-10s\n", "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT");
-        System.out.println("-------------------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------------");
     }
     // array list read's the transaction.csv file and sorts them
     public static ArrayList<TransactionDetails> readTransactions() {
@@ -37,7 +37,7 @@ public class Ledger {
                 }
             }
         } catch (IOException e) {
-            System.out.println("File not found");
+            System.err.println("File not found");
             System.exit(0);
         }
         /*use the collections class to sort the list in order by newest date.
@@ -90,49 +90,41 @@ public class Ledger {
     public static void showReport() {
         ArrayList<TransactionDetails> transactions = new ArrayList<TransactionDetails>();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\n=====Select a report:=====\n");
-        System.out.println("1) Month To Date");
-        System.out.println("2) Previous Month");
-        System.out.println("3) Year To Date");
-        System.out.println("4) Previous Year");
-        System.out.println("5) Search by Vendor");
-        System.out.println("6) Custom Search");
-        System.out.println("0) Back");
+            System.out.println("\n===== SELECT A REPORT =====\n"
+                + "[1] Month To Date\n"
+                + "[2] Previous Month\n"
+                + "[3] Year To Date\n"
+                + "[4] Previous Year\n"
+                + "[5] Search by Vendor\n"
+                + "[6] Custom Search\n"
+                + "[0] Back");
+
 
         int choice = scanner.nextInt();
         scanner.nextLine();
 
         switch (choice) {
-            case 1: // Month To Date report
-                getMonthToDate();
-                break;
-            case 2:
+            case 1 -> // Month To Date report
+                    getMonthToDate();
+            case 2 ->
                 // Display Previous Month report
-                getPreviousMonth();
-                break;
-            case 3:
+                    getPreviousMonth();
+            case 3 ->
                 // Display Year To Date report
-                getYearToDate();
-                break;
-            case 4:
+                    getYearToDate();
+            case 4 ->
                 // Display Previous Year report
-                getPreviousYear();
-                break;
-            case 5:
+                    getPreviousYear();
+            case 5 ->
                 // ask user for vendor name and display vendor transactions
-                searchByVendor();
-                break;
-            case 6:
+                    searchByVendor();
+            case 6 ->
                 // Call customSearch method
-                customSearch();
-                break;
-            case 0:
+                    customSearch();
+            case 0 ->
                 // Return to previous screen
-                ApplicationInterface.showLedgerScreen();
-                break;
-            default:
-                System.out.println("Invalid choice.");
-                break;
+                    ApplicationInterface.showLedgerScreen();
+            default -> System.err.println("Invalid choice.");
         }
     }
     // this method displays month to date transactions.
@@ -140,9 +132,9 @@ public class Ledger {
     public static void getMonthToDate() {
         LocalDate today = LocalDate.now();
 
-        System.out.println("\n================================ Month to Date ================================");
+        System.out.println("\n================================ MONTH TO DATE ================================");
         printHeader();
-        //this for loop compares the transaction's month and year to the current one and displays them if they match.
+        // this for loop compares the transaction's month and year to the current one and displays them if they match.
         // the comparison of the year is important because it prevents the program from printing the same current month from previous years.
         for (TransactionDetails transaction : transactions) {
             LocalDate transactionDate = transaction.getDate();
@@ -160,7 +152,7 @@ public class Ledger {
         LocalDate today = LocalDate.now();
         int prevMonthValue = today.minusMonths(1).getMonthValue();
 
-        System.out.println("\n================================ Previous Month ================================");
+        System.out.println("\n================================ PREVIOUS MONTH ================================");
         printHeader();
 
         for (TransactionDetails transaction : transactions) {
@@ -175,7 +167,7 @@ public class Ledger {
     public static void getYearToDate() {
         LocalDate today = LocalDate.now();
 
-        System.out.println("\n================================ Year to Date ================================");
+        System.out.println("\n================================== YEAR TO DATE ==================================");
         printHeader();
 
         for (TransactionDetails transaction : transactions) {
@@ -191,7 +183,7 @@ public class Ledger {
     public static void getPreviousYear() {
         LocalDate today = LocalDate.now();
 
-        System.out.println("\n================================ Previous Year ================================");
+        System.out.println("\n================================ PREVIOUS YEAR ================================");
         printHeader();
 
         for (TransactionDetails transaction : transactions) {
@@ -208,7 +200,7 @@ public class Ledger {
         System.out.print("Enter vendor name: ");
         String vendorName = scanner.nextLine();
 
-        System.out.println("\n==================== Transactions for " + vendorName + " ====================");
+        System.out.println("\n==================== TRANSACTION FOR: " + vendorName.toUpperCase() + " ====================");
         printHeader();
 
         for (TransactionDetails transaction : transactions) {
@@ -216,7 +208,7 @@ public class Ledger {
                 System.out.printf("%-15s %-25s %-15s %-10.2f\n", transaction.getDate(), transaction.getDescription(),
                         transaction.getVendor(), transaction.getAmount());
             } else if (transactions.isEmpty()) {
-                System.out.println("No transactions found for vendor: " + vendorName);
+                System.err.println("No transactions found for vendor: " + vendorName);
             }
         }
     }
@@ -262,23 +254,51 @@ public class Ledger {
         printHeader();
         for (TransactionDetails transaction : transactions) {
             // this checks to see if the start date for the transaction is NOT before the date entered by the user
-            boolean matchesStartDate = startDate == null || !transaction.getDate().isBefore(startDate);
-            // this checks to see if the end date for the transaction is NOT after the date entered by the user
-            boolean matchesEndDate = endDate == null || !transaction.getDate().isAfter(endDate);
-            // checks to see if users description input contains the description from the list
-            boolean matchesDescription = description.isEmpty() || transaction.getDescription().toLowerCase().contains(description.toLowerCase());
-            // checks to see if users vendor input contains the vendor from the list
-            boolean matchesVendor = vendor.isEmpty() || transaction.getVendor().toLowerCase().contains(vendor.toLowerCase());
-            // checks to see if the users amount input matches any amount from the list
-            boolean matchesAmount = amount == 0 || transaction.getAmount() == amount;
+            boolean matchesStartDate;
+            if (startDate == null) {
+                matchesStartDate = true;
+            } else {
+                matchesStartDate = !transaction.getDate().isBefore(startDate);
+            }
 
+            // this checks to see if the end date for the transaction is NOT after the date entered by the user
+            boolean matchesEndDate;
+            if (endDate == null) {
+                matchesEndDate = true;
+            } else {
+                matchesEndDate = !transaction.getDate().isAfter(endDate);
+            }
+
+            // checks to see if users description input contains the description from the list
+            boolean matchesDescription;
+            if (description.isEmpty() || transaction.getDescription().toLowerCase().contains(description.toLowerCase())) {
+                matchesDescription = true;
+            } else {
+                matchesDescription = false;
+            }
+
+            // checks to see if users vendor input contains the vendor from the list
+            boolean matchesVendor;
+            if (vendor.isEmpty() || transaction.getVendor().toLowerCase().contains(vendor.toLowerCase())) {
+                matchesVendor = true;
+            }else {
+                matchesVendor = false;
+            }
+
+            // checks to see if the users amount input matches any amount from the list
+            boolean matchesAmount;
+            if (amount == 0 || transaction.getAmount() == amount) {
+                matchesAmount = true;
+            } else {
+                matchesAmount = false;
+            }
             if (matchesStartDate && matchesEndDate && matchesDescription && matchesVendor && matchesAmount) {
                 System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", transaction.getDate(), transaction.getTime(), transaction.getDescription(),
                         transaction.getVendor(), transaction.getAmount());
             }
         }
         if (transactions.isEmpty()) {
-            System.out.println("\nNo transactions found.");
+            System.err.println("\nNo transactions found.");
         }
     }
 }
