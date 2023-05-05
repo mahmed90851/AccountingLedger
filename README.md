@@ -22,6 +22,7 @@ It features an easy-to-use user interface where the user can navigate through se
 My application features a personal login. This feature allows the user to enter a username and password. If the username
 and password match those in the isValidAccounts method, the user is allowed to access the home screen.
 
+
 ## Example images 
 
 ![Screen Shot 2023-05-04 at 9 00 21 AM](https://user-images.githubusercontent.com/130098921/236243346-8c9fffa0-3953-4e1a-9e0c-ae6ee0f9d30e.png)
