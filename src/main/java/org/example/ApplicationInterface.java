@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class ApplicationInterface {
     public static void main(String[] args) {
-        //login();
+        login();
         showHomeScreen();
     }
     public static void login() {
@@ -23,20 +23,20 @@ public class ApplicationInterface {
             System.out.println("Enter your password:");
             password = scanner.nextLine();
 
-            if (!isValidCredentials(username, password)) {
+            if (!isValidAccount(username, password)) {
                 System.err.println("That is incorrect. Please try again.");
             }
-        } while (!isValidCredentials(username, password));
+        } while (!isValidAccount(username, password));
 
         System.out.println("Login successful.");
         // continue with the rest of the program
     }
 
-    public static boolean isValidCredentials(String username, String password) {
+    public static boolean isValidAccount(String username, String password) {
         // check if the username and password are valid
         // return true if they are, false otherwise
         // example:
-        return username.equals("bestcoderever") && password.equals("password");
+        return username.equals("bestprogrammer") && password.equals("password");
     }
 
     //The home screen allows the user to select some options for the application
@@ -93,7 +93,7 @@ public class ApplicationInterface {
             writer.write(String.format("%s|%s|%s|%s|%.2f\n", date, time, description, vendor, amount));
         } catch (IOException e) {
             System.err.println("Error writing transaction to file: " + e.getMessage());
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e){
             System.err.println("\nPlease input a number for 'amount' " + e.getMessage());
             addDeposit();
             return;
@@ -179,6 +179,7 @@ public class ApplicationInterface {
             }
         }
     }
+
     //only purpose is to exit the program
     public static void exit(){
         System.out.println("===== EXITING APPLICATION =====");

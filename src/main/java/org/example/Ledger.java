@@ -49,7 +49,7 @@ public class Ledger {
     }
     //prints all transactions that are recorded on the csv file
     public static void printAllTransactions() {
-        System.out.println("============================== ALL TRANSACTIONS =============================\n");
+        System.out.println("================================ ALL TRANSACTIONS ===============================\n");
         printHeader();
 
         for (TransactionDetails t : transactions) {
@@ -61,7 +61,7 @@ public class Ledger {
     // prints out the deposits by selecting the amount value's that are greater than 0.
     // all deposits have a positive value.
     public static void printDeposits() {
-        System.out.println("============================== ALL DEPOSITS ============================== \n");
+        System.out.println("================================= ALL DEPOSITS ================================= \n");
         printHeader();
 
         for (TransactionDetails t : transactions) {
@@ -75,7 +75,7 @@ public class Ledger {
     // prints out the payments by selecting the amount value's that are less than 0.
     // all payments have a negative value.
     public static void printPayments() {
-        System.out.println("================================ ALL PAYMENTS ===============================\n");
+        System.out.println("================================== ALL PAYMENTS =================================\n");
         printHeader();
 
         for (TransactionDetails t : transactions) {
@@ -132,7 +132,7 @@ public class Ledger {
     public static void getMonthToDate() {
         LocalDate today = LocalDate.now();
 
-        System.out.println("\n================================ MONTH TO DATE ================================");
+        System.out.println("\n================================= MONTH TO DATE =================================");
         printHeader();
         // this for loop compares the transaction's month and year to the current one and displays them if they match.
         // the comparison of the year is important because it prevents the program from printing the same current month from previous years.
@@ -152,7 +152,7 @@ public class Ledger {
         LocalDate today = LocalDate.now();
         int prevMonthValue = today.minusMonths(1).getMonthValue();
 
-        System.out.println("\n================================ PREVIOUS MONTH ================================");
+        System.out.println("\n================================= PREVIOUS MONTH ================================");
         printHeader();
 
         for (TransactionDetails transaction : transactions) {
@@ -167,7 +167,7 @@ public class Ledger {
     public static void getYearToDate() {
         LocalDate today = LocalDate.now();
 
-        System.out.println("\n================================== YEAR TO DATE ==================================");
+        System.out.println("\n================================= YEAR TO DATE ==================================");
         printHeader();
 
         for (TransactionDetails transaction : transactions) {
@@ -183,7 +183,7 @@ public class Ledger {
     public static void getPreviousYear() {
         LocalDate today = LocalDate.now();
 
-        System.out.println("\n================================ PREVIOUS YEAR ================================");
+        System.out.println("\n================================= PREVIOUS YEAR =================================");
         printHeader();
 
         for (TransactionDetails transaction : transactions) {
@@ -200,12 +200,12 @@ public class Ledger {
         System.out.print("Enter vendor name: ");
         String vendorName = scanner.nextLine();
 
-        System.out.println("\n==================== TRANSACTION FOR: " + vendorName.toUpperCase() + " ====================");
+        System.out.println("\n======================== TRANSACTION FOR: " + vendorName.toUpperCase() + " ========================");
         printHeader();
 
         for (TransactionDetails transaction : transactions) {
             if (transaction.getVendor().equalsIgnoreCase(vendorName)) {
-                System.out.printf("%-15s %-25s %-15s %-10.2f\n", transaction.getDate(), transaction.getDescription(),
+                System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", transaction.getDate(), transaction.getTime(), transaction.getDescription(),
                         transaction.getVendor(), transaction.getAmount());
             } else if (transactions.isEmpty()) {
                 System.err.println("No transactions found for vendor: " + vendorName);
@@ -220,21 +220,11 @@ public class Ledger {
          */
         System.out.print("Enter start date (yyyy-mm-dd, or press Enter to skip): ");
         String startDateInput = scanner.nextLine().trim();
-        LocalDate startDate;
-        if (startDateInput.isEmpty()) {
-            startDate = null;
-        } else {
-            startDate = LocalDate.parse(startDateInput);
-        }
+        LocalDate startDate = startDateInput.isEmpty() ? null : LocalDate.parse(startDateInput);
 
         System.out.print("Enter end date (yyyy-mm-dd, or press Enter to skip): ");
         String endDateInput = scanner.nextLine().trim();
-        LocalDate endDate;
-        if (endDateInput.isEmpty()) {
-            endDate = null;
-        } else {
-            endDate = LocalDate.parse(endDateInput);
-        }
+        LocalDate endDate = endDateInput.isEmpty() ? null : LocalDate.parse(endDateInput);
 
         System.out.print("Enter description (or press Enter to skip): ");
         String description = scanner.nextLine().trim();
@@ -250,7 +240,7 @@ public class Ledger {
         } else {
             amount = Double.parseDouble(amountInput);
         }
-        System.out.println("\n============================== SEARCH RESULTS ==============================");
+        System.out.println("\n================================ SEARCH RESULTS =================================");
         printHeader();
         for (TransactionDetails transaction : transactions) {
             // this checks to see if the start date for the transaction is NOT before the date entered by the user
@@ -271,8 +261,6 @@ public class Ledger {
             if (matchesStartDate && matchesEndDate && matchesDescription && matchesVendor && matchesAmount) {
                 System.out.printf("%-15s %-15s %-25s %-15s %-10.2f\n", transaction.getDate(), transaction.getTime(), transaction.getDescription(),
                         transaction.getVendor(), transaction.getAmount());
-            }else{
-                System.err.println("Transaction not found");
             }
         }
     }
