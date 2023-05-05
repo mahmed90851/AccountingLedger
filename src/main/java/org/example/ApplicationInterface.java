@@ -10,6 +10,9 @@ public class ApplicationInterface {
         login();
         showHomeScreen();
     }
+
+    // the login method lets the user enter a username and password
+    // if the user's input matches the username and password from isValidAmount, it would continue to home screen
     public static void login() {
         Scanner scanner = new Scanner(System.in);
 
@@ -92,9 +95,9 @@ public class ApplicationInterface {
 
             writer.write(String.format("%s|%s|%s|%s|%.2f\n", date, time, description, vendor, amount));
         } catch (IOException e) {
-            System.err.println("Error writing transaction to file: " + e.getMessage());
+            System.err.println("Error writing transaction to file: ");
         } catch (NumberFormatException e){
-            System.err.println("\nPlease input a number for 'amount' " + e.getMessage());
+            System.err.println("\nPlease input a number for 'amount' ");
             addDeposit();
             return;
         }

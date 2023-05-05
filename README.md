@@ -2,6 +2,7 @@
 
 The Accounting Ledger is an application that allows users to manage their financial transactions.
 With this application, users can add deposits, make payments, and generate various financial reports.
+It features an easy-to-use user interface where the user can navigate through separate menus.
 
 ## Features
 
@@ -15,6 +16,11 @@ With this application, users can add deposits, make payments, and generate vario
   - Previous year's transactions
   - Search transactions by vendor
   - Custom search based on date range, description, vendor, and amount
+
+## Special Feature
+
+My application features a personal login. This feature allows the user to enter a username and password. If the username
+and password match those in the isValidAccounts method, the user is allowed to access the home screen.
 
 ## Example images 
 
